@@ -18,4 +18,20 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    try{
+        const result = await userService.deleteUser(id);
+        res.status(202).json({
+            message: `User ${id} deleted successfully`
+        });
+    }catch(error){
+        res.status(401).json({error});
+    }
+})
+
+router.get("/drop", () => {
+    userService.drop()
+})
+
 module.exports = router;

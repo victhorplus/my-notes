@@ -7,18 +7,34 @@ export class UserService {
         const { nome, email, password } = user;
 
         const isMatchUser = await User.findOne({
-            where: { email: email }
+            where: { email }
         });
-        
+
         if(isMatchUser){ throw "Email already in use" }
 
-        const result: UserModel = await User.create<any, any>({
+        const result = await User.create<any, any>({
             nome,
             email,
             password: await hash(password, 8)
         });
+        const newUser: UserModel = result.dataValues;
 
-        delete result?.password;
-        return result;
+        delete newUser.password;
+        return newUser;
+    }
+
+    async deleteUser(id: string): Promise<number> {
+        const isMatchUser = await User.findOne({
+            where: { id }
+        });
+        if(!isMatchUser){ throw "User not found" }
+
+        return await User.destroy({
+            where: { id }
+        });
+    }
+
+    drop(){
+        User.drop();
     }
 }
