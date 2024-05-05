@@ -14,21 +14,31 @@ router.post('/', async (req, res) => {
         const result = await userService.createUser(body)
         res.status(201).json(result);
     }catch(error){
-        res.status(401).json({error});
+        res.status(401).json({ error });
     }
 });
 
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     try{
-        const result = await userService.deleteUser(id);
+        await userService.deleteUser(id);
         res.status(202).json({
             message: `User ${id} deleted successfully`
         });
     }catch(error){
-        res.status(401).json({error});
+        res.status(401).json({ error });
     }
-})
+});
+
+router.post('/auth', async (req, res) => {
+    const { email, password } = req.body;
+    try{
+        const token = await userService.authenticate(email, password);
+        res.status(201).json(token);
+    }catch(error){
+        res.status(401).json({ error: error.message })
+    }
+});
 
 router.get("/drop", () => {
     userService.drop()
