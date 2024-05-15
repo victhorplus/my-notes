@@ -1,19 +1,27 @@
 GET http://localhost:3000/
 
-###
-
+### Cadastrar user
 POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-    "nome": "Victhor 4",
-    "email": "victhor4@email.com",
+    "nome": "Victhor 3",
+    "email": "victhor3@email.com",
     "password": "abc1234"
 }
 
-###
+### Deletar user
 DELETE http://localhost:3000/user/8662acc9-a5c5-4424-8e94-8c258b01bc37
 
+### Autenticar user
+POST http://localhost:3000/user/auth
+Content-Type: application/json
 
-###
+{
+    "email": "victhor3@email.com",
+    "password": "abc1234"
+}
+
+
+### Deletar todos os users
 GET http://localhost:3000/user/drop

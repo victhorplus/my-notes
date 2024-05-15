@@ -1,3 +1,4 @@
+import { authenticateToken } from "../../../middlewares";
 import { UserService } from "./user.service";
 
 const express = require('express')
@@ -18,8 +19,15 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
+    const { userId } = req.body;
+    if(id !== userId) {
+        res.status(401).json({
+            error: "Requisição de usuário inválido"
+        });
+        return;
+    }
     try{
         await userService.deleteUser(id);
         res.status(202).json({
