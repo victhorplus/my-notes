@@ -3,7 +3,7 @@ const express = require('express')
 const app = express();
 const port = process.env.PORT;
 
-const userRouter = require('./modules/user/use-cases/user.controller');
+const userRouter = require('./modules/user/use-cases/user/user.controller');
 
 app.use(express.json());
 
