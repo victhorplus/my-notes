@@ -1,5 +1,5 @@
-import { User } from '../../../../../db';
-import { UserModel } from '../../classes';
+import { User } from '../../../../db';
+import { UserModel } from '../classes/user.model';
 import { hash, compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
