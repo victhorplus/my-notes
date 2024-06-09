@@ -9,7 +9,7 @@ export function authenticateToken(req, res, next) {
         req.body.userId = sub;
         next();
     }catch(err){
-        res.status(403).json({
+        res.status(401).json({
             error: 'Token inválido'
         })
     }

@@ -1,13 +1,10 @@
 import { Router } from "express";
 import { NotesService } from "./notes.service";
 import { authenticateToken } from "../../../middlewares/authenticate.middleware";
+import { NotesModel } from "../classes/notes.model";
 
 const router: Router = require('express').Router();
 const notesService: NotesService = new NotesService();
-
-router.get('/', (req, res) => {
-    res.send("Bem vindo as notas");
-});
 
 router.post('/', authenticateToken, async (req, res) => {
     try{
@@ -19,6 +16,16 @@ router.post('/', authenticateToken, async (req, res) => {
         })
     }catch(error){
         return res.status(404).json({ error });
+    }
+});
+
+router.get('/', authenticateToken, async (req, res) => {
+    try{
+        const { userId } = req.body;
+        const notes: NotesModel[] = await notesService.getNotes(userId);
+        res.status(200).json({data: notes})
+    }catch(error){
+        res.status(404).json({ error })
     }
 })
 

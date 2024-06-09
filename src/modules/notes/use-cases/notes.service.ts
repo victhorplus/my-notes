@@ -10,4 +10,10 @@ export class NotesService {
             }
         )
     }
+
+    getNotes(userId: string): Promise<NotesModel[]>{
+        return Note.findAll({
+            where: { userId }
+        });
+    }
 }
