@@ -16,7 +16,7 @@ app.use('/user', userRouter);
 app.use('/notes', notesRouter);
 
 export function initServer(): void {
-    app.listen(port, '0.0.0.0', () => {
+    app.listen(port || 3000, '0.0.0.0', () => {
         console.log("Servidor rodando na porta: ", port)
     });
 }
