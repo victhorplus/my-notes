@@ -33,11 +33,22 @@ router.delete('/:noteId', authenticateToken, async (req, res) => {
     try{
         const { userId } = req.body;
         const { noteId } = req.params;
-        const result = await notesService.deleteNotes(userId, noteId);
+        const result = await notesService.deleteNote(userId, noteId);
         res.status(201).json(result)
     }catch(error){
         res.status(404).json({ error })
     }
-})
+});
+
+router.patch('/:noteId', authenticateToken, async (req, res) => {
+    try{
+        const { userId, content } = req.body;
+        const { noteId } = req.params;
+        const result = await notesService.updateNote(userId, noteId, content);
+        res.status(201).json(result);
+    }catch(error){
+        res.status(404).json({ error })
+    }
+});
 
 module.exports = router;

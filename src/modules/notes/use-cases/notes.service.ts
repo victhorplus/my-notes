@@ -17,7 +17,7 @@ export class NotesService {
         });
     }
 
-    async deleteNotes(userId, noteId): Promise<any> {
+    async deleteNote(userId, noteId): Promise<number> {
         const matchNote = await Note.findByPk(noteId);
         if(!matchNote){
             throw 'Nenhuma nota encontrada';
@@ -28,5 +28,19 @@ export class NotesService {
         return Note.destroy({
             where: { id: noteId }
         });
+    }
+
+    async updateNote(userId: string, noteId: string, newContent: string): Promise<[affectedCount: number]> {
+        const matchNote = await Note.findByPk(noteId);
+        if(!matchNote){
+            throw 'Nenhuma nota encontrada';
+        }
+        if(matchNote.userId != userId){
+            throw 'Requisição inválida - Nota não pertence ao usuário';
+        }
+        return Note.update(
+            { content: newContent },  
+            { where: { id: noteId }}
+        )
     }
 }
