@@ -16,4 +16,17 @@ export class NotesService {
             where: { userId }
         });
     }
+
+    async deleteNotes(userId, noteId): Promise<any> {
+        const matchNote = await Note.findByPk(noteId);
+        if(!matchNote){
+            throw 'Nenhuma nota encontrada';
+        }
+        if(matchNote.userId != userId){
+            throw 'Requisição inválida - Nota não pertence ao usuário';
+        }
+        return Note.destroy({
+            where: { id: noteId }
+        });
+    }
 }

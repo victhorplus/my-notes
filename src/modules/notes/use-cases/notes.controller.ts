@@ -23,7 +23,18 @@ router.get('/', authenticateToken, async (req, res) => {
     try{
         const { userId } = req.body;
         const notes: NotesModel[] = await notesService.getNotes(userId);
-        res.status(200).json({data: notes})
+        return res.status(200).json({data: notes})
+    }catch(error){
+        res.status(404).json({ error })
+    }
+});
+
+router.delete('/:noteId', authenticateToken, async (req, res) => {
+    try{
+        const { userId } = req.body;
+        const { noteId } = req.params;
+        const result = await notesService.deleteNotes(userId, noteId);
+        res.status(201).json(result)
     }catch(error){
         res.status(404).json({ error })
     }
