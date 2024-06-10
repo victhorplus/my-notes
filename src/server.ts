@@ -9,7 +9,7 @@ const notesRouter = require('./modules/notes/use-cases/notes.controller');
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send("Hello World!")
+    res.send("Hello World. Wellcome to My Notes API!")
 });
 
 app.use('/user', userRouter);
