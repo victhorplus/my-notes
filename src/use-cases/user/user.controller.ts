@@ -1,4 +1,4 @@
-import { authenticateToken } from "../../../middlewares/authenticate.middleware";
+import { authenticateToken } from "../../middlewares/authenticate.middleware";
 import { UserService } from "./user.service";
 
 const express = require('express')

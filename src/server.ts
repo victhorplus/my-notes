@@ -3,8 +3,8 @@ const express = require('express')
 const app = express();
 const port = process.env.PORT || 3000;
 
-const userRouter = require('./modules/user/use-cases/user.controller');
-const notesRouter = require('./modules/notes/use-cases/notes.controller');
+const userRouter = require('./use-cases/user/user.controller');
+const notesRouter = require('./use-cases/user/user.controller');
 
 app.use(express.json());
 

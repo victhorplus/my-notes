@@ -1,15 +1,15 @@
-import { User } from '../../../../db/models/user.model';
-import { UserModel } from '../classes/user.model';
-import { hash, compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { hash, compare } from 'bcryptjs';
+import { UserModel } from '../../classes';
+import { User } from '../../../db/models/user.model';
 
 export class UserService {
     async createUser(user: UserModel): Promise<UserModel> {
         const { nome, email, password } = user;
-
         const userMatch = await User.findOne({
             where: { email }
         });
+
         if(userMatch){ throw "Email already in use" }
 
         const result = await User.create<any, any>({
@@ -18,15 +18,16 @@ export class UserService {
             password: await hash(password, 8)
         });
         const newUser: UserModel = result.dataValues;
-
         delete newUser.password;
+        
         return newUser;
     }
 
     async deleteUser(id: string): Promise<number> {
-        const userMatch = await User.findOne({
+        const userMatch: UserModel = await User.findOne({
             where: { id }
-        });
+        }) as unknown as UserModel;
+
         if(!userMatch){ throw "User not found" }
 
         return await User.destroy({
@@ -35,9 +36,10 @@ export class UserService {
     }
 
     async authenticate(email: string, password): Promise<{ token: string }> {
-        const { dataValues: userMatch }: { dataValues: UserModel } = await User.findOne({
+        const userMatch: UserModel = await User.findOne({
             where: { email }
-        });
+        }) as unknown as UserModel;
+
         if(!userMatch) { throw new Error("Email or password invalid") }
     
         const isPasswordMatch: boolean = await compare(password, userMatch.password);

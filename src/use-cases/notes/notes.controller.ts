@@ -1,7 +1,7 @@
 import { Router } from "express";
+import { authenticateToken } from "../../middlewares/authenticate.middleware";
+import { NotesModel } from "../../classes";
 import { NotesService } from "./notes.service";
-import { authenticateToken } from "../../../middlewares/authenticate.middleware";
-import { NotesModel } from "../classes/notes.model";
 
 const router: Router = require('express').Router();
 const notesService: NotesService = new NotesService();
