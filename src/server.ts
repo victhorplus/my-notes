@@ -4,7 +4,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const userRouter = require('./use-cases/user/user.controller');
-const notesRouter = require('./use-cases/user/user.controller');
+const notesRouter = require('./use-cases/notes/notes.controller');
+const refreshTokenRouter = require('./use-cases/refresh-token/refresh-token.controller');
 
 app.use(express.json());
 
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
 
 app.use('/user', userRouter);
 app.use('/notes', notesRouter);
+app.use('/refresh-token', refreshTokenRouter);
 
 export function initServer(): void {
     app.listen(port, '0.0.0.0', () => {

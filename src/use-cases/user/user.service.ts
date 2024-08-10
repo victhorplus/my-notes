@@ -1,33 +1,40 @@
-import { sign } from 'jsonwebtoken';
 import { hash, compare } from 'bcryptjs';
-import { UserModel } from '../../classes';
-import { User } from '../../../db/models/user.model';
+import { TokenModel, UserModel } from '../../classes';
+import { User } from '../../../db/models';
+import { AccessToken, RefreshToken } from '../../providers';
 
 export class UserService {
+    accessToken: AccessToken;
+    refresToken: RefreshToken;
+
+    constructor(){
+        this.accessToken = new AccessToken();
+        this.refresToken = new RefreshToken();
+    }
+
     async createUser(user: UserModel): Promise<UserModel> {
         const { nome, email, password } = user;
-        const userMatch = await User.findOne({
+        const { dataValues: userMatch } = await User.findOne({
             where: { email }
         });
 
         if(userMatch){ throw "Email already in use" }
 
-        const result = await User.create<any, any>({
+        const { dataValues: newUser } = await User.create({
             nome,
             email,
             password: await hash(password, 8)
         });
-        const newUser: UserModel = result.dataValues;
         delete newUser.password;
         
         return newUser;
     }
 
     async deleteUser(id: string): Promise<number> {
-        const userMatch: UserModel = await User.findOne({
+        const { dataValues: userMatch } = await User.findOne({
             where: { id }
-        }) as unknown as UserModel;
-
+        });
+        console.log("OLÁ",userMatch)
         if(!userMatch){ throw "User not found" }
 
         return await User.destroy({
@@ -35,24 +42,20 @@ export class UserService {
         });
     }
 
-    async authenticate(email: string, password): Promise<{ token: string }> {
-        const userMatch: UserModel = await User.findOne({
+    async authenticate(email: string, password): Promise<{ accessToken: string, refreshToke: TokenModel }> {
+        const { dataValues: userMatch } = await User.findOne({
             where: { email }
-        }) as unknown as UserModel;
-
+        });
+        console.log("USER MATCH", userMatch)
         if(!userMatch) { throw new Error("Email or password invalid") }
     
         const isPasswordMatch: boolean = await compare(password, userMatch.password);
         if(!isPasswordMatch) { throw new Error("Email or password invalid") }
-        const token = sign(
-            {},
-            process.env.TOKEN_SECRET,
-            {
-                subject: userMatch.id,
-                expiresIn: "1 days"
-            }
-        );
-        return { token }
+
+        const accessToken: string = this.accessToken.generate(userMatch.id);
+        const refreshToke: TokenModel = await this.refresToken.generate(userMatch.id);
+
+        return { accessToken, refreshToke }
     }
 
     drop(){

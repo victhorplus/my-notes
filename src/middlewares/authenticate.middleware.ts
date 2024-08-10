@@ -10,7 +10,7 @@ export function authenticateToken(req, res, next) {
         next();
     }catch(err){
         res.status(401).json({
-            error: 'Token inválido'
+            error: err.message
         })
     }
 }
