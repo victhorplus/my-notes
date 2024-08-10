@@ -1,6 +1,4 @@
-import { where } from "sequelize";
 import { Token } from "../../../db/models";
-import { TokenModel } from "../../classes";
 import { AccessToken, RefreshToken } from "../../providers";
 
 export class RefreshTokenService {
