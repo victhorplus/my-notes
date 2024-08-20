@@ -1,16 +1,18 @@
 import 'dotenv/config';
 const express = require('express')
 const app = express();
+const cors = require('cors');
 const port = process.env.PORT || 3000;
 
 const userRouter = require('./use-cases/user/user.controller');
 const notesRouter = require('./use-cases/notes/notes.controller');
 const refreshTokenRouter = require('./use-cases/refresh-token/refresh-token.controller');
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send("Hello World. Welcome to My Notes API!")
+    res.status(200).send("Hello World. Welcome to My Notes API!")
 });
 
 app.use('/user', userRouter);
