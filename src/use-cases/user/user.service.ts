@@ -34,7 +34,7 @@ export class UserService {
         const { dataValues: userMatch } = await User.findOne({
             where: { id }
         });
-        console.log("OLÁ",userMatch)
+        
         if(!userMatch){ throw "User not found" }
 
         return await User.destroy({
@@ -42,7 +42,7 @@ export class UserService {
         });
     }
 
-    async authenticate(email: string, password): Promise<{ accessToken: string, refreshToke: TokenModel }> {
+    async authenticate(email: string, password): Promise<{ userMatch: UserModel, accessToken: string, refreshToke: TokenModel }> {
         const { dataValues: userMatch } = await User.findOne({
             where: { email }
         });
@@ -52,13 +52,10 @@ export class UserService {
         const isPasswordMatch: boolean = await compare(password, userMatch.password);
         if(!isPasswordMatch) { throw new Error("Email or password invalid") }
 
+        delete userMatch.password;
         const accessToken: string = this.accessToken.generate(userMatch.id);
         const refreshToke: TokenModel = await this.refresToken.generate(userMatch.id);
 
-        return { accessToken, refreshToke }
-    }
-
-    drop(){
-        User.drop();
+        return { userMatch, accessToken, refreshToke }
     }
 }
