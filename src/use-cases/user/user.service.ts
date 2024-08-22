@@ -42,7 +42,7 @@ export class UserService {
         });
     }
 
-    async authenticate(email: string, password): Promise<{ userMatch: UserModel, accessToken: string, refreshToke: TokenModel }> {
+    async authenticate(email: string, password): Promise<{ user: UserModel, accessToken: string, refreshToke: TokenModel }> {
         const { dataValues: userMatch } = await User.findOne({
             where: { email }
         });
@@ -56,6 +56,6 @@ export class UserService {
         const accessToken: string = this.accessToken.generate(userMatch.id);
         const refreshToke: TokenModel = await this.refresToken.generate(userMatch.id);
 
-        return { userMatch, accessToken, refreshToke }
+        return { user: userMatch, accessToken, refreshToke }
     }
 }
