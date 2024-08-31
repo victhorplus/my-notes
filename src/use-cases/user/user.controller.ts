@@ -1,3 +1,4 @@
+import { CookieOptions } from "express";
 import { authenticateToken } from "../../middlewares/authenticate.middleware";
 import { UserService } from "./user.service";
 
@@ -38,18 +39,5 @@ router.delete('/:id', authenticateToken, async (req, res) => {
     }
 });
 
-router.post('/auth', async (req, res) => {
-    const { email, password } = req.body;
-    try{
-        const token = await userService.authenticate(email, password);
-        res.status(201).json(token);
-    }catch(error){
-        res.status(401).json({ error: error.message })
-    }
-});
-
-router.get("/drop", () => {
-    userService.drop()
-})
 
 module.exports = router;

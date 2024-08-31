@@ -5,11 +5,11 @@ import { AccessToken, RefreshToken } from '../../providers';
 
 export class UserService {
     accessToken: AccessToken;
-    refresToken: RefreshToken;
+    refreshToken: RefreshToken;
 
     constructor(){
         this.accessToken = new AccessToken();
-        this.refresToken = new RefreshToken();
+        this.refreshToken = new RefreshToken();
     }
 
     async createUser(user: UserModel): Promise<UserModel> {
@@ -40,22 +40,5 @@ export class UserService {
         return await User.destroy({
             where: { id }
         });
-    }
-
-    async authenticate(email: string, password): Promise<{ user: UserModel, accessToken: string, refreshToke: TokenModel }> {
-        const { dataValues: userMatch } = await User.findOne({
-            where: { email }
-        });
-        console.log("USER MATCH", userMatch)
-        if(!userMatch) { throw new Error("Email or password invalid") }
-    
-        const isPasswordMatch: boolean = await compare(password, userMatch.password);
-        if(!isPasswordMatch) { throw new Error("Email or password invalid") }
-
-        delete userMatch.password;
-        const accessToken: string = this.accessToken.generate(userMatch.id);
-        const refreshToke: TokenModel = await this.refresToken.generate(userMatch.id);
-
-        return { user: userMatch, accessToken, refreshToke }
     }
 }

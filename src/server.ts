@@ -1,23 +1,29 @@
 import 'dotenv/config';
-const express = require('express')
+const express = require('express');
 const app = express();
 const cors = require('cors');
-const port = process.env.PORT || 3000;
-
+const cookieParser = require('cookie-parser');
 const userRouter = require('./use-cases/user/user.controller');
 const notesRouter = require('./use-cases/notes/notes.controller');
-const refreshTokenRouter = require('./use-cases/refresh-token/refresh-token.controller');
+const authenticateRouter = require('./use-cases/authenticate/authenticate.controller');
 
-app.use(cors());
+const port = process.env.PORT || 3000;
+const corsOptions = {
+    origin: 'http://localhost:4200',
+    credentials: true,
+};
+
 app.use(express.json());
+app.use(cors(corsOptions));
+app.use(cookieParser('refreshToken'));
+
+app.use('/user', userRouter);
+app.use('/notes', notesRouter);
+app.use('/authenticate', authenticateRouter);
 
 app.get('/', (req, res) => {
     res.status(200).send("Hello World. Welcome to My Notes API!")
 });
-
-app.use('/user', userRouter);
-app.use('/notes', notesRouter);
-app.use('/refresh-token', refreshTokenRouter);
 
 export function initServer(): void {
     app.listen(port, '0.0.0.0', () => {
