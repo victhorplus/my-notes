@@ -2,13 +2,8 @@ import { Note } from '../../../db/models/note.model';
 import { NotesModel } from '../../classes/notes.model';
 
 export class NotesService {
-    createNote(userId: string, content: string): Promise<NotesModel> {
-        return Note.create(
-            {
-                userId,
-                content
-            }
-        )
+    createNote(note: NotesModel): Promise<NotesModel> {
+        return Note.create(note)
     }
 
     getNotes(userId: string): Promise<NotesModel[]>{
@@ -30,17 +25,14 @@ export class NotesService {
         });
     }
 
-    async updateNote(userId: string, noteId: string, newContent: string): Promise<[affectedCount: number]> {
-        const matchNote = await Note.findByPk(noteId);
+    async updateNote(updatedNote: NotesModel): Promise<[affectedCount: number]> {
+        const matchNote = await Note.findByPk(updatedNote.id);
         if(!matchNote){
             throw 'Nenhuma nota encontrada';
         }
-        if(matchNote.userId != userId){
-            throw 'Requisição inválida - Nota não pertence ao usuário';
-        }
-        return Note.update(
-            { content: newContent },  
-            { where: { id: noteId }}
-        )
+
+        return Note.update(updatedNote, { 
+            where: { id: updatedNote.id }
+        });
     }
 }

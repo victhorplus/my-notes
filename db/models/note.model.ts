@@ -22,6 +22,10 @@ export const Note = sequelize.define<NotesInstance>(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        title: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
         content: {
             type: DataTypes.TEXT,
             allowNull: true,

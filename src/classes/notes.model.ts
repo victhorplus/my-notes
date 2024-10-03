@@ -1,5 +1,6 @@
 export interface NotesModel {
-    id: string;
+    id?: string;
     userId: string;
-    content: string;
+    title?: string;
+    content?: string;
 }
