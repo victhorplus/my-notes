@@ -6,7 +6,7 @@ export class AccessToken {
         return sign(
             {},
             process.env.TOKEN_SECRET,
-            { subject: userId, expiresIn: '5m' }
+            { subject: userId, expiresIn: '1m' }
         );
     }
 }
