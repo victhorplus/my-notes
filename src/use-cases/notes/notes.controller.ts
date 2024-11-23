@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticateToken } from "../../middlewares/authenticate.middleware";
-import { NotesModel } from "../../classes";
+import { INotesParams, NotesModel } from "../../classes";
 import { NotesService } from "./notes.service";
 
 const router: Router = require('express').Router();
@@ -20,8 +20,9 @@ router.post('/', authenticateToken, async (req, res) => {
 router.get('/', authenticateToken, async (req, res) => {
     try{
         const { userId } = req.body;
+        const params: INotesParams = req.query;
 
-        const notes: NotesModel[] = await notesService.getNotes(userId);
+        const notes: NotesModel[] = await notesService.getNotes(userId, params);
         return res.status(200).json({data: notes})
     }catch(error){
         res.status(404).json({ error })

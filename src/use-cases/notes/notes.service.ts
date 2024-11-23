@@ -1,14 +1,23 @@
+import { Op } from 'sequelize';
 import { Note } from '../../../db/models/note.model';
-import { NotesModel } from '../../classes/notes.model';
+import { NotesModel, INotesParams } from '../../classes';
 
 export class NotesService {
     createNote(note: NotesModel): Promise<NotesModel> {
         return Note.create(note)
     }
 
-    getNotes(userId: string): Promise<NotesModel[]>{
+    getNotes(userId: string, params?: INotesParams): Promise<NotesModel[]>{
         return Note.findAll({
-            where: { userId }
+            where: { 
+                [Op.and]: [
+                    { userId },
+                    { title: { [Op.substring]: params.title || '' }}
+                ]
+            }
+        }).catch(error => {
+            console.error(error);
+            return error
         });
     }
 
