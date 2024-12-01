@@ -41,7 +41,7 @@ router.delete('/:noteId', authenticateToken, async (req, res) => {
     }
 });
 
-router.patch('/:noteId', authenticateToken, async (req, res) => {
+router.put('/:noteId', authenticateToken, async (req, res) => {
     try{
         const note: NotesModel = req.body;
         const { noteId } = req.params;
