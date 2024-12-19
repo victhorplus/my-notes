@@ -13,9 +13,9 @@ export class AuthenticateService {
     }
 
     async authenticate(email: string, password): Promise<{ user: UserModel; accessToken: string; refreshToken: TokenModel; cookieOptions }> {
-        const { dataValues: userMatch } = await User.findOne({
+        const userMatch = (await User.findOne({
             where: { email }
-        });
+        }))?.dataValues;
         if(!userMatch) { throw new Error("Email or password invalid") }
     
         const isPasswordMatch: boolean = await compare(password, userMatch.password);
