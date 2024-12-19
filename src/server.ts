@@ -9,7 +9,7 @@ const authenticateRouter = require('./use-cases/authenticate/authenticate.contro
 
 const port = process.env.PORT || 3000;
 const corsOptions = {
-    origin: 'http://localhost:4200',
+    origin: 'https://my-notes-frontend-330b.onrender.com/',
     credentials: true,
 };
 
